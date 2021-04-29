@@ -8,5 +8,4 @@ class TimeLine {
     fun publish(message: Tweet) {
         messages.add(message)
     }
-
 }
