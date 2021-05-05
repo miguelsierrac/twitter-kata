@@ -1,5 +1,6 @@
 package com.example.core
 
+import ReadMessage
 import com.google.common.truth.ExpectFailure
 import com.google.common.truth.Truth.assertThat
 import net.bytebuddy.utility.RandomString
@@ -27,14 +28,16 @@ lateinit var timeLineRepository: TimeLineRepository
 
     @Test
     fun readingTimeLineTest() {
-        var timeLine = TimeLine()
+        val timeLine = TimeLine()
+        timeLine.publish(Tweet("Hi!"))
+        timeLine.publish(Tweet("Another message"))
         timeLine.publish(Tweet("I love the weather today."))
 
         `when`(timeLineRepository.get(anyString())).thenReturn(timeLine)
         val user = "alice"
 
-        var timeLineAlice = ReadMessage.execute(user = user)
+        val timeLineAlice = ReadMessage(timeLineRepository).execute(user = user)
 
-        assertEquals(timeLineAlice.last(), Tweet("I love the weather today."))
+        assertEquals(timeLineAlice, timeLine)
     }
 }
